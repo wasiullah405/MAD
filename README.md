@@ -1,4 +1,4 @@
-<h1 align="center">📱 Flutter Portfolio App</h1>
+<h1 align="center">📱 Flutter Portfolio </h1>
 
 <p align="center">
   A clean and modern mobile portfolio app built with Flutter, featuring a login screen and a personal profile page.
