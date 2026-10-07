@@ -1,0 +1,71 @@
+import 'package:flutter/material.dart';
+import 'constants.dart';
+import 'widgets.dart';
+import 'profile_page.dart';
+
+class LoginPage extends StatelessWidget {
+  LoginPage({super.key});
+
+  final email = TextEditingController();
+  final password = TextEditingController();
+
+  Widget field(String hint, IconData icon, TextEditingController c,
+      {bool hide = false}) {
+    return TextField(
+      controller: c,
+      obscureText: hide,
+      decoration: InputDecoration(
+        hintText: hint,
+        prefixIcon: Icon(icon, color: accent),
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('LOGIN'),
+        centerTitle: true,
+        backgroundColor: primary,
+        foregroundColor: Colors.white,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          children: [
+            const SizedBox(height: 30),
+            photo(110),
+            const SizedBox(height: 20),
+            const Text('Welcome Back',
+                style: TextStyle(
+                    fontSize: 24, fontWeight: FontWeight.bold, color: primary)),
+            const SizedBox(height: 8),
+            const Text('Please sign in to continue to your profile',
+                style: TextStyle(color: Colors.grey)),
+            const SizedBox(height: 30),
+            field('Email Address', Icons.email, email),
+            const SizedBox(height: 16),
+            field('Password', Icons.lock, password, hide: true),
+            const SizedBox(height: 24),
+            button('Login', () {
+              if (email.text.isEmpty || password.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('Please enter email and password')));
+                return;
+              }
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const ProfilePage()));
+            }),
+          ],
+        ),
+      ),
+    );
+  }
+}
