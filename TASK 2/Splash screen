@@ -1,0 +1,134 @@
+import 'dart:async'; 
+import 'dart:ui'; 
+import 'package:flutter/material.dart'; 
+import 'login_page.dart'; 
+ 
+class WelcomeSplashScreen extends StatefulWidget { 
+  const WelcomeSplashScreen({super.key}); 
+ 
+  State<WelcomeSplashScreen> createState() => _WelcomeSplashScreenState(); 
+} 
+ 
+class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> 
+    with SingleTickerProviderStateMixin { 
+  double _opacity = 1.0; 
+  double _blurValue = 0.0; 
+  late Timer _timer; 
+ 
+  void initState() { 
+    super.initState(); 
+ 
+    _timer = Timer(const Duration(milliseconds: 3500), () { 
+      if (mounted) { 
+        setState(() { 
+          _opacity = 0.0; 
+          _blurValue = 15.0; 
+        }); 
+      } 
+    }); 
+ 
+    Future.delayed(const Duration(seconds: 5), () { 
+      if (mounted) { 
+        Navigator.of(context).pushReplacement( 
+          PageRouteBuilder( 
+            pageBuilder: (context, animation, secondaryAnimation) => 
+                const LoginPage(), 
+            transitionsBuilder: 
+                (context, animation, secondaryAnimation, child) { 
+              return FadeTransition(opacity: animation, child: child); 
+ 
+ 
+3 
+            }, 
+            transitionDuration: const Duration(milliseconds: 800), 
+          ), 
+        ); 
+      } 
+    }); 
+  } 
+ 
+  void dispose() { 
+    _timer.cancel(); 
+    super.dispose(); 
+  } 
+ 
+  Widget build(BuildContext context) { 
+    return Scaffold( 
+      body: Stack( 
+        children: [ 
+          Container( 
+            decoration: const BoxDecoration( 
+              gradient: LinearGradient( 
+                colors: [Color(0xFF1A237E), Color(0xFF3F51B5), Color(0xFF5C6BC0)], 
+                begin: Alignment.topLeft, 
+                end: Alignment.bottomRight, 
+              ), 
+            ), 
+          ), 
+          AnimatedOpacity( 
+            duration: const Duration(milliseconds: 1500), 
+            opacity: _opacity, 
+            curve: Curves.easeInOut, 
+            child: TweenAnimationBuilder<double>( 
+              tween: Tween<double>(begin: 0.0, end: _blurValue), 
+              duration: const Duration(milliseconds: 1500), 
+              builder: (context, blur, child) { 
+                return ImageFiltered( 
+                  imageFilter: ImageFilter.blur(sigmaX: blur, sigmaY: blur), 
+                  child: child, 
+                ); 
+              }, 
+              child: Center( 
+ 
+ 
+4 
+                child: Column( 
+                  mainAxisAlignment: MainAxisAlignment.center, 
+                  children: [ 
+                    Container( 
+                      padding: const EdgeInsets.all(22), 
+                      decoration: const BoxDecoration( 
+                        color: Colors.white24, 
+                        shape: BoxShape.circle, 
+                      ), 
+                      child: const Icon( 
+                        Icons.person_pin_rounded, 
+                        size: 80, 
+                        color: Colors.white, 
+                      ), 
+                    ), 
+                    const SizedBox(height: 24), 
+                    const Text( 
+                      'Welcome to Wasi\'s Portfolio', 
+                      style: TextStyle( 
+                        fontSize: 30, 
+                        fontWeight: FontWeight.bold, 
+                        color: Colors.white, 
+                        letterSpacing: 1.1, 
+                      ), 
+                    ), 
+                    const SizedBox(height: 12), 
+                    const Text( 
+                      'Loading professional experience...', 
+                      style: TextStyle( 
+                        fontSize: 16, 
+                        color: Colors.white70, 
+                      ), 
+                    ), 
+                    const SizedBox(height: 40), 
+                    const CircularProgressIndicator( 
+                      color: Colors.white, 
+                    ), 
+                  ], 
+                ), 
+              ), 
+ 
+ 
+5 
+            ), 
+          ), 
+        ], 
+      ), 
+    ); 
+  } 
+} 
